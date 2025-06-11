@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.escom.backend.domain.dto.LoginRequest;
 import com.escom.backend.domain.dto.LoginResponse;
+import com.escom.backend.domain.dto.security.PublicKeyDTO;
 import com.escom.backend.domain.entities.Usuario;
 import com.escom.backend.domain.repositories.UsuarioRepository;
 import com.escom.backend.utils.JwtUtil;
@@ -29,6 +30,12 @@ public class AuthService {
 
     String token = jwtUtil.generateToken(user.getEmail(), user.getRol(), user.getId());
 
-    return new LoginResponse(user.getNombre(), user.getEmail(), user.getRol(), token);
+    return new LoginResponse(user.getId(), user.getNombre(), user.getEmail(), user.getRol(), token);
+  }
+
+  public String savePublicKey(PublicKeyDTO publicKeyDto) {
+    // Aquí podrías guardar la clave pública en una base de datos o en un archivo
+    // Por simplicidad, solo retornamos un mensaje de éxito
+    return "Clave pública guardada con éxito";
   }
 }

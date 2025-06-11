@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.escom.backend.domain.dto.LoginRequest;
 import com.escom.backend.domain.dto.LoginResponse;
+import com.escom.backend.domain.dto.security.PublicKeyDTO;
 import com.escom.backend.presentation.services.AuthService;
 
 import jakarta.validation.Valid;
@@ -22,5 +23,11 @@ public class AuthController {
   @PostMapping("/login")
   public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
     return ResponseEntity.ok(authService.login(request));
+  }
+
+  @PostMapping("/savePublicKey")
+  public ResponseEntity<String> savePublicKey(@Valid @RequestBody PublicKeyDTO publicKeyDto) {
+    authService.savePublicKey(publicKeyDto);
+    return ResponseEntity.ok("Clave pública almacenada con éxito");
   }
 }

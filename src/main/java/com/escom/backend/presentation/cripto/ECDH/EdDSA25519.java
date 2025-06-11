@@ -1,11 +1,27 @@
 package com.escom.backend.presentation.cripto.ECDH;
 
+import java.security.KeyFactory;
 import java.security.KeyPairGenerator;
+import java.security.PublicKey;
+import java.security.Security;
+import java.security.Signature;
+import java.security.spec.X509EncodedKeySpec;
 
-public class ECDH {
-  public static void generateKeyPair(String curve) throws Exception {
-    KeyPairGenerator kpg = KeyPairGenerator.getInstance("EC");
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+public class EdDSA25519 {
+  static {
+    Security.addProvider(new BouncyCastleProvider());
+  }
+
+   public static boolean verifySignature(byte[] publicKeyBytes, byte[] message, byte[] signature) throws Exception {
+    KeyFactory keyFactory = KeyFactory.getInstance("Ed25519", "BC");
+    PublicKey publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(publicKeyBytes));
+
+    Signature verifier = Signature.getInstance("Ed25519", "BC");
+    verifier.initVerify(publicKey);
+    verifier.update(message);
+    return verifier.verify(signature);
   }
 }
 
