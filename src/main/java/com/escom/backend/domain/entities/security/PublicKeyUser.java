@@ -7,6 +7,8 @@ import com.escom.backend.domain.entities.Usuario;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -26,14 +28,11 @@ public class PublicKeyUser {
   @GeneratedValue
   public UUID id_publicKey;
 
-  @Id
-  @GeneratedValue
-  public UUID usuario_id;
-
   @ManyToOne
   @JoinColumn(name = "usuario_id", nullable = false)
   private Usuario usuario;
 
+  @Enumerated(EnumType.STRING)
   @Column(nullable = false, name = "tipo")
   private KeyType keyType;
 
@@ -55,9 +54,6 @@ public class PublicKeyUser {
   // == Getters ==
   public UUID getIdPublicKey() {
     return id_publicKey;
-  }
-  public UUID getIdUser() {
-    return usuario_id;
   }
   public Usuario getUsuario() {
     return usuario;

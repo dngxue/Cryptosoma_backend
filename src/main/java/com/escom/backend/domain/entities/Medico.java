@@ -54,4 +54,7 @@ public class Medico {
     public String getTelefono() {
       return this.telefono;
     }
+    public Usuario getUsuario() {
+      return this.usuario;
+    }
 }

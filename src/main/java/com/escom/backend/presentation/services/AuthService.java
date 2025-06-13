@@ -32,10 +32,4 @@ public class AuthService {
 
     return new LoginResponse(user.getId(), user.getNombre(), user.getEmail(), user.getRol(), token);
   }
-
-  public String savePublicKey(PublicKeyDTO publicKeyDto) {
-    // Aquí podrías guardar la clave pública en una base de datos o en un archivo
-    // Por simplicidad, solo retornamos un mensaje de éxito
-    return "Clave pública guardada con éxito";
-  }
 }

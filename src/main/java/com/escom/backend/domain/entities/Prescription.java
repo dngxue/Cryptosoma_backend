@@ -21,23 +21,24 @@ public class Prescription {
   private UUID id;
 
   @NotNull(message = "El path del archivo es obligatorio")
-  private String path;
+  private String filename;
 
   @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
-  private boolean surtida = false;
+  private Boolean surtida = false;
 
   @NotNull(message = "La firma digital es obligatoria")
-  private String signature;
+  @Column(name = "signature_doctor", nullable = false)
+  private String signatureMedico;
 
-  @NotNull(message = "El hash del archivo es obligatorio")
-  private String hash;
+  @Column(nullable = true, name = "signature_pharmacist") 
+  private String signaturePharmacist;
 
-  @Column(name = "issue_date")
   @NotNull(message = "La fecha de emisión es obligatoria")
-  private LocalDate issueDate;
+  @Column(name = "fecha_emision", nullable = false)
+  private LocalDate fechaEmision;
 
-  @NotNull(message = "La fecha de recepción es obligatoria")
-  private LocalDate receivedDate;
+  @Column(nullable = true, name = "fecha_surtido") // Será null hasta que el farmacéutico la firme
+  private LocalDate fechaSurtido;
 
   @ManyToOne
   @JoinColumn(name = "paciente_id")
@@ -51,21 +52,23 @@ public class Prescription {
   @JoinColumn(name = "farmaceutico_id")
   private Farmaceutico farmaceutico;
 
-  // == SETTERS ==
-  public void setPath(String path) {
-    this.path = path;
+  public void setFilename(String filename) {
+    this.filename = filename;
   }
-  public void setSignature(String signature) {
-    this.signature = signature;
+  public void setSurtida(Boolean surtida) {
+    this.surtida = surtida;
   }
-  public void setHash(String hash) {
-    this.hash = hash;
+  public void setSignatureMedico(String signature_medico) {
+    this.signatureMedico = signature_medico;
   }
-  public void setIssueDate(LocalDate issueDate) {
-    this.issueDate = issueDate;
+  public void setSignaturePharmacist(String signature_pharmacist) {
+    this.signaturePharmacist = signature_pharmacist;
   }
-  public void setReceivedDate(LocalDate receivedDate) {
-    this.receivedDate = receivedDate;
+  public void setFecha_emision(LocalDate fechaEmision) {
+    this.fechaEmision = fechaEmision;
+  }
+  public void setFecha_surtido(LocalDate fechaSurtido) {
+    this.fechaSurtido = fechaSurtido;
   }
   public void setPaciente(Paciente paciente) {
     this.paciente = paciente;
@@ -76,36 +79,34 @@ public class Prescription {
   public void setFarmaceutico(Farmaceutico farmaceutico) {
     this.farmaceutico = farmaceutico;
   }
-  // == GETTERS ==
   public UUID getId() {
-    return this.id;
+    return id;
   }
-  public String getPath() {
-    return this.path;
+  public String getFilename() {
+    return filename;
   }
-  public boolean getSurtida() {
-    return this.surtida;
+  public Boolean getSurtida() {
+    return surtida;
   }
-  public String getSignature() {
-    return this.signature;
+  public String getSignatureMedico() {
+    return signatureMedico;
   }
-  public String getHash() {
-    return this.hash;
+  public String getSignaturePharmacist() {
+    return signaturePharmacist;
   }
-
-  public LocalDate getIssueDate() {
-    return this.issueDate;
+  public LocalDate getFecha_emision() {
+    return fechaEmision;
   }
-  public LocalDate getReceivedDate() {
-    return this.receivedDate;
+  public LocalDate getFecha_surtido() {
+    return fechaSurtido;
   }
   public Paciente getPaciente() {
-    return this.paciente;
+    return paciente;
   }
   public Medico getMedico() {
-    return this.medico;
+    return medico;
   }
   public Farmaceutico getFarmaceutico() {
-    return this.farmaceutico;
+    return farmaceutico;
   }
 }

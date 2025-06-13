@@ -50,7 +50,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         permite saber qué usuario está realizando la petición.
         Aplicar reestricciones */ 
         SecurityContextHolder.getContext().setAuthentication(auth); 
-      
+        filterChain.doFilter(request, response);
       } catch (Exception e) {
           response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido");
           return;

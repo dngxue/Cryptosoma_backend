@@ -11,6 +11,7 @@ import com.escom.backend.domain.dto.LoginRequest;
 import com.escom.backend.domain.dto.LoginResponse;
 import com.escom.backend.domain.dto.security.PublicKeyDTO;
 import com.escom.backend.presentation.services.AuthService;
+import com.escom.backend.presentation.services.PublicKeyService;
 
 import jakarta.validation.Valid;
 
@@ -20,6 +21,9 @@ public class AuthController {
   @Autowired
   private AuthService authService;
 
+  @Autowired
+  private PublicKeyService publicKeyService;
+
   @PostMapping("/login")
   public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
     return ResponseEntity.ok(authService.login(request));
@@ -27,7 +31,8 @@ public class AuthController {
 
   @PostMapping("/savePublicKey")
   public ResponseEntity<String> savePublicKey(@Valid @RequestBody PublicKeyDTO publicKeyDto) {
-    authService.savePublicKey(publicKeyDto);
+    System.out.println("Tipo de clave: " + publicKeyDto.keyType);
+    publicKeyService.savePublicKey(publicKeyDto);
     return ResponseEntity.ok("Clave pública almacenada con éxito");
   }
 }
