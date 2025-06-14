@@ -1,6 +1,7 @@
 HELP.md
 target/
 postgres/
+prescriptions/
 .env
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
