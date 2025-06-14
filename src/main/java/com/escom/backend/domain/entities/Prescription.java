@@ -20,7 +20,7 @@ public class Prescription {
   @GeneratedValue
   private UUID id;
 
-  @NotNull(message = "El path del archivo es obligatorio")
+  @NotNull(message = "El nombre del archivo es obligatorio")
   private String filename;
 
   @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")

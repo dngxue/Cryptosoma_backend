@@ -11,9 +11,12 @@ import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class AES_GCM {
+  static {
+    Security.addProvider(new BouncyCastleProvider()); 
+  }
+
   public static String encryptGCM(byte[] aesKeyBytes, byte[] fileContent, String filename) {
     try {
-      Security.addProvider(new BouncyCastleProvider());
       SecretKey aesKey = new SecretKeySpec(aesKeyBytes, "AES");
       byte[] iv = new byte[12];
       SecureRandom random = new SecureRandom();
