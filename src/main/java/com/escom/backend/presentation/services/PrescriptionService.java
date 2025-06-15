@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,9 @@ import com.escom.backend.domain.repositories.MedicoRepository;
 import com.escom.backend.domain.repositories.PacienteRepository;
 import com.escom.backend.domain.repositories.PrescriptionRepository;
 import com.escom.backend.domain.repositories.PublicKeyUserRepository;
+import com.escom.backend.presentation.cripto.ECDH25519;
 import com.escom.backend.presentation.cripto.EdDSA25519;
+import com.escom.backend.presentation.cripto.ECDH25519.KeyPairEncoded;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +51,7 @@ public class PrescriptionService {
     Medico medico = medicoRepository.findById(prescriptionDTO.id_medico)
     .orElseThrow(() -> new RuntimeException("Médico no encontrado con ID: " + prescriptionDTO.id_medico));
 
-    PublicKeyUser publicKeyUser = publicKeyUserRepository.findByUsuario_IdAndKeyType(medico.getUsuario().getId(), KeyType.EdDSA)
+    PublicKeyUser publicKeyMedicoEdDSA = publicKeyUserRepository.findByUsuario_IdAndKeyType(medico.getUsuario().getId(), KeyType.EdDSA)
     .orElseThrow(() -> new RuntimeException("Clave pública no encontrada para el médico con ID: " + medico.getUsuario().getId()));
 
     ObjectMapper mapper = new ObjectMapper();
@@ -71,7 +72,7 @@ public class PrescriptionService {
     }
 
     byte[] messageBytes = cleanJson.getBytes(StandardCharsets.UTF_8);
-    byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyUser.getPublicKey());
+    byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyMedicoEdDSA.getPublicKey());
     byte[] signatureBytes = Base64.getDecoder().decode(firma);
 
     // Verificar la firma del médico
@@ -79,7 +80,7 @@ public class PrescriptionService {
       throw new RuntimeException("Firma del médico no válida.");
     }
 
-    // Almacenar la receta.
+    // Registrar la receta.
     Prescription prescription = new Prescription();
     prescription.setPaciente(paciente);
     prescription.setFilename("name_temp");
@@ -89,7 +90,25 @@ public class PrescriptionService {
     
     prescription = prescriptionRepository.save(prescription);
 
+    // Determinar un nombre y clave derivada
     String filename = prescription.getId().toString() + ".enc";
+
+    PublicKeyUser publicKeyPaciente = publicKeyUserRepository.findByUsuario_IdAndKeyType(paciente.getUsuario().getId(), KeyType.ECDH)
+      .orElseThrow(() -> new RuntimeException("Clave pública ECDH no encontrada para el paciente: " + paciente.getUsuario().getId()));
+
+    try {
+      KeyPairEncoded kpTemp = ECDH25519.generateDHKeyPair();
+      byte[] publicKeyPacienteBytes = Base64.getDecoder().decode(publicKeyPaciente.getPublicKey());
+      byte[] sharedKey = ECDH25519.deriveSharedSecret(kpTemp.privateKeyB64, publicKeyPacienteBytes);
+ 
+      System.out.println("Public Key Servidor: " + kpTemp.getPublicKeyBase64());
+      System.out.println("Shared Key: " +  Base64.getEncoder().encodeToString(sharedKey));
+
+    } catch (Exception e) {
+      throw new RuntimeException("Error al generar la llave compartida" + paciente.getUsuario().getId());
+    }
+
+    // Proceso de almacenamiento
     try {
       Path path = Paths.get("prescriptions", filename);
       Files.createDirectories(path.getParent());
