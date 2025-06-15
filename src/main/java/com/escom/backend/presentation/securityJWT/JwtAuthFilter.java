@@ -1,4 +1,4 @@
-package com.escom.backend.presentation.security;
+package com.escom.backend.presentation.securityJWT;
 
 import java.io.IOException;
 import java.util.Collections;

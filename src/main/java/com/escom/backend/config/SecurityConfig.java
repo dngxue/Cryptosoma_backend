@@ -1,12 +1,13 @@
 package com.escom.backend.config;
 
-import com.escom.backend.presentation.security.JwtAuthFilter;
 import org.springframework.context.annotation.*;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.*;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.escom.backend.presentation.securityJWT.JwtAuthFilter;
 
 /**
  * En esta clase se configura la seguridad de la aplicación, qué usuarios pueden acceder a qué recursos,

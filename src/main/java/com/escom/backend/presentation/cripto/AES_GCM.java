@@ -5,6 +5,7 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.util.Base64;
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -15,7 +16,13 @@ public class AES_GCM {
     Security.addProvider(new BouncyCastleProvider()); 
   }
 
-  public static String encryptGCM(byte[] aesKeyBytes, byte[] fileContent, String filename) {
+  public static SecretKey generateAESKey(int keySize) throws Exception {
+    KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+    keyGen.init(keySize);
+    return keyGen.generateKey();
+  }
+
+  public static String encryptGCM(byte[] aesKeyBytes, byte[] fileContent) {
     try {
       SecretKey aesKey = new SecretKeySpec(aesKeyBytes, "AES");
       byte[] iv = new byte[12];
