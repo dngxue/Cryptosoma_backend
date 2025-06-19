@@ -4,7 +4,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.crypto.SecretKey;
 
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.escom.backend.domain.dto.prescription.PrescriptionDTO;
+import com.escom.backend.domain.dto.prescription.PrescriptionResponseDTO;
 import com.escom.backend.domain.entities.Prescription;
 import com.escom.backend.domain.entities.security.KeyType;
 import com.escom.backend.domain.entities.security.PublicKeyUser;
@@ -107,6 +110,10 @@ public class PrescriptionService {
     );
 
     return response;
+  }
+
+  public List<PrescriptionResponseDTO> getPrescriptionsByUser(UUID userId) {
+    return accessKeyService.getPrescriptionsByUserAndAccessKey(userId);
   }
 
   private ObjectMapper createObjectMapper() {
