@@ -55,7 +55,7 @@ public class PrescriptionService {
     .orElseThrow(() -> new RuntimeException("Médico no encontrado con ID: " + prescriptionDTO.id_medico));
 
     PublicKeyUser publicKeyMedicoEdDSA = publicKeyUserRepository.findByUsuario_IdAndKeyType(medico.getUsuario().getId(), KeyType.EdDSA)
-    .orElseThrow(() -> new RuntimeException("Clave pública no encontrada para el médico con ID: " + medico.getUsuario().getId()));
+    .orElseThrow(() -> new RuntimeException("Clave pública EdDSA no encontrada para el médico con ID: " + medico.getUsuario().getId()));
 
     ObjectMapper mapper = createObjectMapper();
     ObjectNode rootNode = mapper.valueToTree(prescriptionDTO);
