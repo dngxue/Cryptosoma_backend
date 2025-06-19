@@ -1,12 +1,9 @@
 package com.escom.backend.presentation.services;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.escom.backend.domain.dto.UsuarioResponseDTO;
-import com.escom.backend.domain.dto.prescription.AccessPharmacistDTO;
+import com.escom.backend.domain.dto.users.get.UsuarioResponseDTO;
 import com.escom.backend.domain.entities.users.Paciente;
 import com.escom.backend.domain.entities.users.Usuario;
 import com.escom.backend.domain.repositories.PacienteRepository;

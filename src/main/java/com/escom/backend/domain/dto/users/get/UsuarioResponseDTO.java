@@ -1,4 +1,4 @@
-package com.escom.backend.domain.dto;
+package com.escom.backend.domain.dto.users.get;
 
 import java.time.LocalDate;
 import java.util.UUID;
