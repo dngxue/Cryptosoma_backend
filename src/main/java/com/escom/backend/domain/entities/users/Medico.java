@@ -1,4 +1,4 @@
-package com.escom.backend.domain.entities;
+package com.escom.backend.domain.entities.users;
 
 import jakarta.persistence.*;
 import java.util.UUID;

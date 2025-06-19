@@ -6,7 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.escom.backend.domain.entities.Rol;
+import com.escom.backend.domain.entities.users.Rol;
 
 import java.security.Key;
 import java.util.Base64;

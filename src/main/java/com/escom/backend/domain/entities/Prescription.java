@@ -3,6 +3,10 @@ package com.escom.backend.domain.entities;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.escom.backend.domain.entities.users.Farmaceutico;
+import com.escom.backend.domain.entities.users.Medico;
+import com.escom.backend.domain.entities.users.Paciente;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

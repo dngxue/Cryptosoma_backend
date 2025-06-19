@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.escom.backend.domain.dto.security.PublicKeyDTO;
-import com.escom.backend.domain.entities.Usuario;
 import com.escom.backend.domain.entities.security.PublicKeyUser;
+import com.escom.backend.domain.entities.users.Usuario;
 import com.escom.backend.domain.repositories.PublicKeyUserRepository;
 import com.escom.backend.domain.repositories.UsuarioRepository;
 

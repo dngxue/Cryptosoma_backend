@@ -5,6 +5,11 @@ import com.escom.backend.domain.dto.MedicoDTO;
 import com.escom.backend.domain.dto.PacienteDTO;
 import com.escom.backend.domain.dto.admin.ResponseDTO;
 import com.escom.backend.domain.entities.*;
+import com.escom.backend.domain.entities.users.Farmaceutico;
+import com.escom.backend.domain.entities.users.Medico;
+import com.escom.backend.domain.entities.users.Paciente;
+import com.escom.backend.domain.entities.users.Rol;
+import com.escom.backend.domain.entities.users.Usuario;
 import com.escom.backend.domain.repositories.*;
 import com.escom.backend.utils.MatriculaUtil;
 
