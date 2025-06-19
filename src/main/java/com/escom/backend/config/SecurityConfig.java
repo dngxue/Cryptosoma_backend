@@ -41,8 +41,8 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/prescription/**").hasAuthority("MEDICO")
-                .requestMatchers(HttpMethod.GET, "/prescription/**").authenticated()
+                // .requestMatchers(HttpMethod.POST, "/prescription/**").hasAuthority("MEDICO")
+                // .requestMatchers(HttpMethod.GET, "/prescription/**").authenticated()
                 .requestMatchers("/admin/**").permitAll()
                 .anyRequest().authenticated()
             )
