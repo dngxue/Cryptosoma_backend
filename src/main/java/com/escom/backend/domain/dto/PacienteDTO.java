@@ -24,11 +24,11 @@ public class PacienteDTO {
   @NotBlank(message = "El nombre no puede estar vacío")
   public String nombre;
 
-  @Size(min = 18, max = 18, message = "El CURP debe tener exactamente 18 caracteres")
   @NotBlank(message = "El CURP es un campo obligatorio")
+  @Size(min = 18, max = 18, message = "El CURP debe tener exactamente 18 caracteres")
   public String curp;
 
   @NotNull(message = "La fecha de nacimiento es un campo obligatorio")
-  @Past
+  @Past(message = "La fecha de nacimiento debe ser pasada a la fecha actual")
   public LocalDate fechaNacimiento;
 }

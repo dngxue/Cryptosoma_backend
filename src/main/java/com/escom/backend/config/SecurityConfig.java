@@ -6,7 +6,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.*;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import com.escom.backend.presentation.securityJWT.JwtAuthFilter;
 
 /**
@@ -16,6 +18,20 @@ import com.escom.backend.presentation.securityJWT.JwtAuthFilter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    /** Configuración de CORS, permite que nuestro frontend se comunique */
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setAllowCredentials(true);
+        corsConfig.addAllowedOrigin("http://localhost:5173");
+        corsConfig.addAllowedHeader("*");
+        corsConfig.addAllowedMethod("*");
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfig);  
+
+        return new CorsFilter(source);  // Retorna el filtro CORS
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {

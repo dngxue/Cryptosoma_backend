@@ -27,7 +27,6 @@ public class PrescriptionController {
       System.out.println("✅ PrescriptionController registrado correctamente");
   }
 
-
   @PostMapping("/save")
   public ResponseEntity<?> createPrescription(@Valid @RequestBody PrescriptionDTO dto) {
     Map<String, Object> result = prescriptionService.savePrescription(dto);
