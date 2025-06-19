@@ -27,7 +27,7 @@ public class JwtUtil {
         return Jwts.builder()
             .setSubject(email)
             .claim("rol", rol.name())
-            .claim("userId", userId.toString())
+            .claim("id", userId.toString())
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 día
             .signWith(key)

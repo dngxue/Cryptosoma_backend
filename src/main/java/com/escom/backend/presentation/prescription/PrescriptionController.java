@@ -1,5 +1,6 @@
 package com.escom.backend.presentation.prescription;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
 
@@ -10,11 +11,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.escom.backend.domain.dto.prescription.PrescriptionDTO;
+import com.escom.backend.domain.entities.security.AccessKey;
+import com.escom.backend.presentation.securityJWT.JwtSessionInfo;
 import com.escom.backend.presentation.services.PrescriptionService;
+import com.escom.backend.presentation.services.security.AccessKeyService;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
@@ -25,6 +30,8 @@ public class PrescriptionController {
 
   @Autowired
   private PrescriptionService prescriptionService;
+  @Autowired
+  private AccessKeyService accessKeyService;
 
   @PostConstruct
   public void init() {
@@ -40,5 +47,22 @@ public class PrescriptionController {
   @GetMapping("/{userId}")
   public ResponseEntity<?> getPrescriptionUser(@PathVariable("userId") UUID userId) {
     return ResponseEntity.ok(prescriptionService.getPrescriptionsByUser(userId));
+  }
+
+  @GetMapping("/encrypted/{recetaId}")
+  public ResponseEntity<?> getAccessKeyForUser(@PathVariable UUID recetaId) {
+      UUID usuarioId = JwtSessionInfo.getUserId();
+
+      AccessKey accessKey = accessKeyService.getAccessKey(usuarioId, recetaId);
+      byte[] encryptedPrescriptionBytes = prescriptionService.getEncyptedPrescription(recetaId);
+      String encryptedPrescription = new String(encryptedPrescriptionBytes, StandardCharsets.UTF_8);
+
+      Map<String, String> response = Map.of(
+          "accessKey", accessKey.getKey(),
+          "publicKeyServidor", accessKey.getServerPublicKey(),
+          "encryptedPrescription", encryptedPrescription
+      );
+
+      return ResponseEntity.ok(response);
   }
 }

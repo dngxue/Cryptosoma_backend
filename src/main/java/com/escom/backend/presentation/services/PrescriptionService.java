@@ -67,7 +67,6 @@ public class PrescriptionService {
     } catch (JsonProcessingException e) {
         throw new RuntimeException("Error al convertir la receta a JSON: " + e.getMessage());
     }
-
     byte[] message = cleanJson.getBytes(StandardCharsets.UTF_8);
     signatureService.verifySignature(message, firma, publicKeyMedicoEdDSA.getPublicKey());
 
@@ -110,6 +109,22 @@ public class PrescriptionService {
     );
 
     return response;
+  }
+
+  public byte[] getEncyptedPrescription(UUID prescriptionId) {
+    Prescription prescription = prescriptionRepository.findById(prescriptionId)
+        .orElseThrow(() -> new RuntimeException("Receta no encontrada"));
+
+    Path path = Paths.get("prescriptions", prescription.getFilename());
+    if (!Files.exists(path)) {
+        throw new RuntimeException("Archivo cifrado no encontrado para la receta con ID: " + prescriptionId);
+    }
+    try {
+        return Files.readAllBytes(path); 
+    } catch (Exception e) {
+        throw new RuntimeException("Error al leer el archivo cifrado: " + e.getMessage());
+    }
+
   }
 
   public List<PrescriptionResponseDTO> getPrescriptionsByUser(UUID userId) {
