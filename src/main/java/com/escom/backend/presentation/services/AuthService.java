@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.escom.backend.domain.dto.LoginRequest;
 import com.escom.backend.domain.dto.LoginResponse;
-import com.escom.backend.domain.entities.Usuario;
+import com.escom.backend.domain.entities.users.Usuario;
 import com.escom.backend.domain.repositories.UsuarioRepository;
 import com.escom.backend.utils.JwtUtil;
 

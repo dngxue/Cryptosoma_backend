@@ -2,7 +2,7 @@ package com.escom.backend.domain.dto;
 
 import java.util.UUID;
 
-import com.escom.backend.domain.entities.Rol;
+import com.escom.backend.domain.entities.users.Rol;
 
 public class LoginResponse {
   public UUID userId;

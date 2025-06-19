@@ -4,31 +4,28 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Base64;
 import java.util.Map;
 
 import javax.crypto.SecretKey;
 
-import org.bouncycastle.jcajce.provider.symmetric.AES;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.escom.backend.domain.dto.prescription.PrescriptionDTO;
-import com.escom.backend.domain.entities.Medico;
-import com.escom.backend.domain.entities.Paciente;
 import com.escom.backend.domain.entities.Prescription;
 import com.escom.backend.domain.entities.security.KeyType;
 import com.escom.backend.domain.entities.security.PublicKeyUser;
+import com.escom.backend.domain.entities.users.Medico;
+import com.escom.backend.domain.entities.users.Paciente;
 import com.escom.backend.domain.repositories.MedicoRepository;
 import com.escom.backend.domain.repositories.PacienteRepository;
 import com.escom.backend.domain.repositories.PrescriptionRepository;
 import com.escom.backend.domain.repositories.PublicKeyUserRepository;
 import com.escom.backend.presentation.cripto.AES_GCM;
-import com.escom.backend.presentation.cripto.ECDH25519;
-import com.escom.backend.presentation.cripto.EdDSA25519;
-import com.escom.backend.presentation.cripto.ECDH25519.KeyPairEncoded;
+import com.escom.backend.presentation.services.security.AccessKeyService;
 import com.escom.backend.presentation.services.security.KeyAgreementService;
 import com.escom.backend.presentation.services.security.SignatureService;
+import com.escom.backend.presentation.services.security.KeyAgreementService.KeyAgreementResult;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,6 +42,7 @@ public class PrescriptionService {
 
   @Autowired private SignatureService signatureService;
   @Autowired private KeyAgreementService keyAgreementService;
+  @Autowired private AccessKeyService accessKeyService;
 
   public Map<String, Object> savePrescription(PrescriptionDTO prescriptionDTO) {
     Paciente paciente = pacienteRepository.findById(prescriptionDTO.id_paciente)
@@ -77,24 +75,29 @@ public class PrescriptionService {
     prescription.setMedico(medico);
     prescription.setSignatureMedico(firma);
     prescription.setFecha_emision(prescriptionDTO.fecha_emision);
-    
     prescription = prescriptionRepository.save(prescription);
 
     PublicKeyUser publicKeyPaciente = publicKeyUserRepository.findByUsuario_IdAndKeyType(paciente.getUsuario().getId(), KeyType.ECDH)
     .orElseThrow(() -> new RuntimeException("Clave pública ECDH no encontrada para el paciente: " + paciente.getUsuario().getId()));
     
+    PublicKeyUser publicKeyMedico = publicKeyUserRepository.findByUsuario_IdAndKeyType(medico.getUsuario().getId(), KeyType.ECDH)
+      .orElseThrow(() -> new RuntimeException("Clave públic ECDH no encontrada para el médico: " + medico.getUsuario().getId()));
+
     try {
       String filename = prescription.getId().toString() + ".enc";
-      byte[] sharedKey = keyAgreementService.generateSharedKey(publicKeyPaciente.getPublicKey());
-      
       SecretKey aesSecretKey = AES_GCM.generateAESKey(256);
       byte[] aesKeyBytes = aesSecretKey.getEncoded();
+
       String encodedFile = AES_GCM.encryptGCM(aesKeyBytes, message);
-      String encodedKey = AES_GCM.encryptGCM(sharedKey, aesKeyBytes);
       saveEncryptedPrescription(prescription, encodedFile, filename);
-      System.out.println("Shared Key: " +  Base64.getEncoder().encodeToString(sharedKey));
-      System.out.println("Llave cifrada, esta es la que será almacenada en la base de datos: " + encodedKey);
       
+      KeyAgreementResult resultPaciente = keyAgreementService.generateSharedKey(publicKeyPaciente.getPublicKey());
+      String encodedKeyPaciente = AES_GCM.encryptGCM(resultPaciente.sharedKey(), aesKeyBytes);
+      accessKeyService.createAccessKey(paciente.getUsuario(), prescription, encodedKeyPaciente, resultPaciente.serverKeyPair().getPublicKeyBase64());
+      
+      KeyAgreementResult resultMedico = keyAgreementService.generateSharedKey(publicKeyMedico.getPublicKey());
+      String encodedKeyMedico = AES_GCM.encryptGCM(resultMedico.sharedKey(), aesKeyBytes);
+      accessKeyService.createAccessKey(medico.getUsuario(), prescription, encodedKeyMedico, resultMedico.serverKeyPair().getPublicKeyBase64());
     } catch (Exception e) {
       throw new RuntimeException("Error al generar la llave compartida" + paciente.getUsuario().getId());
     }

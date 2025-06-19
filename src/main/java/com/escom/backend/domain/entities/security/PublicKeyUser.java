@@ -3,7 +3,7 @@ package com.escom.backend.domain.entities.security;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.escom.backend.domain.entities.Usuario;
+import com.escom.backend.domain.entities.users.Usuario;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
