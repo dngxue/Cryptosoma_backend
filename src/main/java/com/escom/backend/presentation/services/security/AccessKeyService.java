@@ -37,4 +37,9 @@ public class AccessKeyService {
       })
       .collect(Collectors.toList());
   }
+
+  public AccessKey getAccessKey(UUID usuarioId, UUID recetaId) {
+    return accessKeyRepository.findByUsuario_IdAndPrescription_Id(usuarioId, recetaId)
+        .orElseThrow(() -> new RuntimeException("No se encontró clave de acceso para esta receta y usuario."));
+  }
 }

@@ -2,6 +2,8 @@ package com.escom.backend.presentation.securityJWT;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,12 +41,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         Claims claims = jwtUtil.validateToken(token);
         String email = claims.getSubject();
         String rol = claims.get("rol", String.class);
+        String id = claims.get("id", String.class);
 
-        var auth = new UsernamePasswordAuthenticationToken(
+        Map<String, Object> details = new HashMap<>();
+            details.put("id", id);
+            details.put("email", email);
+        
+            var auth = new UsernamePasswordAuthenticationToken(
             email,
             null,
             Collections.singletonList(new SimpleGrantedAuthority(rol))
         );
+
+        auth.setDetails(details);
 
         /* Almacena la autenticación en el contexto de seguridad,
         permite saber qué usuario está realizando la petición.

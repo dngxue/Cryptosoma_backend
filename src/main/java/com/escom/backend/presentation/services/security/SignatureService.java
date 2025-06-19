@@ -1,6 +1,4 @@
 package com.escom.backend.presentation.services.security;
-
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import org.springframework.stereotype.Service;
