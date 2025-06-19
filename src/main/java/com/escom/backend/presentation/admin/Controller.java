@@ -3,7 +3,7 @@ package com.escom.backend.presentation.admin;
 import com.escom.backend.domain.dto.FarmaceuticoDTO;
 import com.escom.backend.domain.dto.MedicoDTO;
 import com.escom.backend.domain.dto.PacienteDTO;
-import com.escom.backend.domain.dto.admin.ResponseDTO;
+import com.escom.backend.domain.dto.shared.ResponseDTO;
 import com.escom.backend.presentation.services.AdminService;
 
 import jakarta.validation.Valid;
