@@ -1,4 +1,4 @@
-package com.escom.backend.domain.dto;
+package com.escom.backend.domain.dto.users;
 
 import java.time.LocalDate;
 
@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class FarmaceuticoDTO {
+public class MedicoDTO {
   @Email(message = "El correo electrónico debe de ser válido")
   @NotBlank(message = "El correo electrónico no puede estar vacío")
   public String email;
@@ -23,12 +23,19 @@ public class FarmaceuticoDTO {
   @NotBlank(message = "El nombre es un campo obligatorio")
   public String nombre;
 
-  @NotBlank(message = "El número de teléfono es un campo obligatorio")
-  @Size(min = 10, max = 10, message = "El número de teléfono debe tener exactamente 10 caracteres númericos")
-  public String tel;
+  @NotBlank(message = "La especialidad es un campo obligatorio")
+  public String especialidad;
 
-  @NotBlank(message = "El nombre de la farmacia es un campo obligatorio")
-  public String farmacia;
+  @NotBlank(message = "La clínica es un campo obligatorio") 
+  public String clinica;
+
+  @Size(min = 7, max = 10, message = "La cédula debe tener entre 7 a 10 caracteres")
+  @NotBlank(message = "La cédula es un campo obligatorio")
+  public String cedula;
+
+  @Size(min = 10, max = 10, message = "El número de teléfono debe tener exactamente 10 caracteres numéricos")
+  @NotBlank(message = "El número de teléfono es un campo obligatorio")
+  public String tel;
 
   @NotNull(message = "La fecha de nacimiento es un campo obligatorio")
   public LocalDate fechaNacimiento;

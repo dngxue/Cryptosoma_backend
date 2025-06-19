@@ -1,5 +1,7 @@
 package com.escom.backend.config;
 
+import java.util.List;
+
 import com.escom.backend.presentation.securityJWT.JwtAuthFilter;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
@@ -8,15 +10,20 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.*;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.*;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import com.escom.backend.presentation.securityJWT.JwtAuthFilter;
 
-import java.util.List;
-
+/**
+ * En esta clase se configura la seguridad de la aplicación, qué usuarios pueden acceder a qué recursos,
+ * y se añade el filtro de autenticación JWT.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    /** Configuración CORS: permite que el frontend en localhost:5173 acceda al backend */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

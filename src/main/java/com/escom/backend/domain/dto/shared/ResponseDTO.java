@@ -1,4 +1,4 @@
-package com.escom.backend.domain.dto.admin;
+package com.escom.backend.domain.dto.shared;
 
 public class ResponseDTO {
   private String status;

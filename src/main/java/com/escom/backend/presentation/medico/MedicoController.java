@@ -1,4 +1,4 @@
-package com.escom.backend.presentation.admin.medico;
+package com.escom.backend.presentation.medico;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,8 @@ import com.escom.backend.presentation.services.UsuarioService;
 public class MedicoController {
   @Autowired
   private UsuarioService usuarioService;
+
+  
   @GetMapping("/{matricula}")
   public ResponseEntity<?> getPrescriptionUser(@PathVariable("matricula") String matricula) {
     return ResponseEntity.ok(usuarioService.getUsuarioByMatricula(matricula));
