@@ -67,7 +67,6 @@ public class PrescriptionService {
     } catch (JsonProcessingException e) {
         throw new RuntimeException("Error al convertir la receta a JSON: " + e.getMessage());
     }
-
     byte[] message = cleanJson.getBytes(StandardCharsets.UTF_8);
     signatureService.verifySignature(message, firma, publicKeyMedicoEdDSA.getPublicKey());
 
