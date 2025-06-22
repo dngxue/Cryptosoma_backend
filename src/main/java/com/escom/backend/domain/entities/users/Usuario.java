@@ -26,7 +26,9 @@ public class Usuario {
     private Rol rol;
 
     private LocalDateTime createdAt = LocalDateTime.now();
-    
+    @Column()
+    private Boolean keys = false;
+
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Medico medico;
     
@@ -49,6 +51,10 @@ public class Usuario {
 
     public void setRol(Rol rol) {
       this.rol = rol;
+    }
+
+    public void setKeys() {
+      this.keys = true;
     }
 
     // == Getters ==
@@ -79,5 +85,9 @@ public class Usuario {
 
     public LocalDateTime getCreatedAt() {
       return this.createdAt;
+    }
+
+    public boolean getKeys() {
+      return this.keys;
     }
 }

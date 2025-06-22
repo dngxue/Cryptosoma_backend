@@ -7,12 +7,13 @@ import com.escom.backend.domain.dto.users.get.UsuarioResponseDTO;
 import com.escom.backend.domain.entities.users.Paciente;
 import com.escom.backend.domain.entities.users.Usuario;
 import com.escom.backend.domain.repositories.PacienteRepository;
+import com.escom.backend.domain.repositories.PrescriptionRepository;
 
 @Service
 public class UsuarioService {
 
-  @Autowired
-  private PacienteRepository pacienteRepository;
+  @Autowired private PacienteRepository pacienteRepository;
+  @Autowired private PrescriptionRepository prescriptionRepository;
 
   public UsuarioResponseDTO getUsuarioByMatricula(String matricula) {
     Paciente paciente = pacienteRepository.findByMatricula(matricula)

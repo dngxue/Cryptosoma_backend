@@ -14,7 +14,6 @@ import com.escom.backend.presentation.services.security.AccessKeyService;
 
 @Service
 public class PatientService {
-  
   @Autowired private PrescriptionRepository prescriptionRepository;
   @Autowired private FarmaceuticoRepository farmaceuticoRepository;
   @Autowired private AccessKeyService accessKeyService;
