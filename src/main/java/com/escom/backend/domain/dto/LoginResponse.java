@@ -9,13 +9,15 @@ public class LoginResponse {
   public String nombre;
   public String email;
   public Rol rol;
+  public Boolean keys;
   public String token;  
 
-  public LoginResponse(UUID userId, String nombre, String email, Rol rol, String token) {
+  public LoginResponse(UUID userId, String nombre, String email, Rol rol, Boolean keys, String token) {
     this.userId = userId; 
     this.nombre = nombre;
     this.email = email;
     this.rol = rol;
+    this.keys = keys;
     this.token = token;
   }
 }

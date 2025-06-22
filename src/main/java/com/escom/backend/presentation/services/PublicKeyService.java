@@ -30,5 +30,7 @@ public class PublicKeyService {
     publicKeyUser.setUsuario(usuario);
     publicKeyUser.setKeyType(publicKeyDto.keyType);
     publicKeyRepository.save(publicKeyUser);
+    usuario.setKeys();
+    usuarioRepository.save(usuario);
   }
 }
