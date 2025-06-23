@@ -1,11 +1,6 @@
 package com.escom.backend.presentation.cripto;
 
-import java.security.KeyFactory;
-import java.security.KeyPairGenerator;
-import java.security.PublicKey;
 import java.security.Security;
-import java.security.Signature;
-import java.security.spec.X509EncodedKeySpec;
 
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;

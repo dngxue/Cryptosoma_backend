@@ -4,7 +4,7 @@ package com.escom.backend.presentation.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.escom.backend.domain.dto.prescription.AccessPharmacistDTO;
+import com.escom.backend.domain.dto.prescription.CreateAccessKeyPharmacistDTO;
 import com.escom.backend.domain.dto.shared.ResponseDTO;
 import com.escom.backend.domain.entities.Prescription;
 import com.escom.backend.domain.entities.users.Farmaceutico;
@@ -18,7 +18,7 @@ public class PatientService {
   @Autowired private FarmaceuticoRepository farmaceuticoRepository;
   @Autowired private AccessKeyService accessKeyService;
 
-  public ResponseDTO grantAccessToPharmacist(AccessPharmacistDTO accessPharmacistDTO) {
+  public ResponseDTO grantAccessToPharmacist(CreateAccessKeyPharmacistDTO accessPharmacistDTO) {
     Prescription prescription = prescriptionRepository.findById(accessPharmacistDTO.idReceta())
       .orElseThrow(() -> new RuntimeException("Receta médica no encontrada"));
 

@@ -3,23 +3,21 @@ package com.escom.backend.presentation.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.escom.backend.domain.dto.users.get.UsuarioResponseDTO;
+import com.escom.backend.domain.dto.users.get.GetPatientResponseDTO;
 import com.escom.backend.domain.entities.users.Paciente;
 import com.escom.backend.domain.entities.users.Usuario;
 import com.escom.backend.domain.repositories.PacienteRepository;
-import com.escom.backend.domain.repositories.PrescriptionRepository;
 
 @Service
 public class UsuarioService {
 
   @Autowired private PacienteRepository pacienteRepository;
-  @Autowired private PrescriptionRepository prescriptionRepository;
 
-  public UsuarioResponseDTO getUsuarioByMatricula(String matricula) {
+  public GetPatientResponseDTO getUsuarioByMatricula(String matricula) {
     Paciente paciente = pacienteRepository.findByMatricula(matricula)
         .orElseThrow(() -> new RuntimeException("Usuario no encontrado con matrícula: " + matricula));
     
     Usuario usuario = paciente.getUsuario();
-    return new UsuarioResponseDTO(paciente.getId(), paciente.getMatricula(), paciente.getCurp(), usuario.getNombre(), usuario.getFechaNacimiento());
+    return new GetPatientResponseDTO(paciente.getId(), paciente.getMatricula(), paciente.getCurp(), usuario.getNombre(), usuario.getFechaNacimiento());
   }
 }

@@ -1,10 +1,9 @@
 package com.escom.backend.presentation.services;
 
 import com.escom.backend.domain.dto.shared.ResponseDTO;
-import com.escom.backend.domain.dto.users.FarmaceuticoDTO;
-import com.escom.backend.domain.dto.users.MedicoDTO;
-import com.escom.backend.domain.dto.users.PacienteDTO;
-import com.escom.backend.domain.entities.*;
+import com.escom.backend.domain.dto.users.CreateFarmaceuticoDTO;
+import com.escom.backend.domain.dto.users.CreateMedicoDTO;
+import com.escom.backend.domain.dto.users.CreatePacienteDTO;
 import com.escom.backend.domain.entities.users.Farmaceutico;
 import com.escom.backend.domain.entities.users.Medico;
 import com.escom.backend.domain.entities.users.Paciente;
@@ -36,7 +35,7 @@ public class AdminService {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public ResponseDTO registrarMedico(MedicoDTO dto) {
+    public ResponseDTO registrarMedico(CreateMedicoDTO dto) {
         if (usuarioRepository.findByEmail(dto.email).isPresent()) {
             throw new RuntimeException("Email ya registrado.");
         }
@@ -62,7 +61,7 @@ public class AdminService {
         return new ResponseDTO("success", "Médico registrado correctamente");
     }
 
-    public ResponseDTO registrarFarmaceutico(FarmaceuticoDTO dto) {
+    public ResponseDTO registrarFarmaceutico(CreateFarmaceuticoDTO dto) {
         if (usuarioRepository.findByEmail(dto.email).isPresent()) {
             throw new RuntimeException("Email ya registrado.");
         }
@@ -86,7 +85,7 @@ public class AdminService {
         return new ResponseDTO("success", "Farmacéutico registrado correctamente");
     }
 
-    public ResponseDTO registrarPaciente(PacienteDTO dto) {
+    public ResponseDTO registrarPaciente(CreatePacienteDTO dto) {
         if (usuarioRepository.findByEmail(dto.email).isPresent()) {
             throw new RuntimeException("Email ya está registrado.");
         }

@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -13,9 +14,15 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.escom.backend.domain.dto.prescription.CreatePrescriptionDTO;
+import com.escom.backend.domain.dto.prescription.GetEncryptedPrescriptionDTO;
 import com.escom.backend.domain.dto.prescription.PrescriptionDTO;
 import com.escom.backend.domain.dto.prescription.PrescriptionResponseDTO;
+import com.escom.backend.domain.dto.users.MedicoDTO;
+import com.escom.backend.domain.dto.users.PacienteDTO;
+import com.escom.backend.domain.dto.users.UsuarioDTO;
 import com.escom.backend.domain.entities.Prescription;
+import com.escom.backend.domain.entities.security.AccessKey;
 import com.escom.backend.domain.entities.security.KeyType;
 import com.escom.backend.domain.entities.security.PublicKeyUser;
 import com.escom.backend.domain.entities.users.Medico;
@@ -47,7 +54,7 @@ public class PrescriptionService {
   @Autowired private KeyAgreementService keyAgreementService;
   @Autowired private AccessKeyService accessKeyService;
 
-  public Map<String, Object> savePrescription(PrescriptionDTO prescriptionDTO) {
+  public Map<String, Object> savePrescription(CreatePrescriptionDTO prescriptionDTO) {
     Paciente paciente = pacienteRepository.findById(prescriptionDTO.id_paciente)
     .orElseThrow(() -> new RuntimeException("Paciente no encontrado con ID: " + prescriptionDTO.id_paciente));
     
@@ -87,7 +94,7 @@ public class PrescriptionService {
 
     try {
       String filename = prescription.getId().toString() + ".enc";
-      SecretKey aesSecretKey = AES_GCM.generateAESKey(256);
+      SecretKey aesSecretKey = AES_GCM.generateAESKey(128);
       byte[] aesKeyBytes = aesSecretKey.getEncoded();
 
       String encodedFile = AES_GCM.encryptGCM(aesKeyBytes, message);
@@ -96,7 +103,7 @@ public class PrescriptionService {
       KeyAgreementResult resultPaciente = keyAgreementService.generateSharedKey(publicKeyPaciente.getPublicKey());
       String encodedKeyPaciente = AES_GCM.encryptGCM(resultPaciente.sharedKey(), aesKeyBytes);
       accessKeyService.createAccessKey(paciente.getUsuario(), prescription, encodedKeyPaciente, resultPaciente.serverKeyPair().getPublicKeyBase64());
-      
+      System.out.println("Shared Key: " + Base64.getEncoder().encodeToString(resultPaciente.sharedKey()));
       KeyAgreementResult resultMedico = keyAgreementService.generateSharedKey(publicKeyMedico.getPublicKey());
       String encodedKeyMedico = AES_GCM.encryptGCM(resultMedico.sharedKey(), aesKeyBytes);
       accessKeyService.createAccessKey(medico.getUsuario(), prescription, encodedKeyMedico, resultMedico.serverKeyPair().getPublicKeyBase64());
@@ -129,6 +136,60 @@ public class PrescriptionService {
 
   public List<PrescriptionResponseDTO> getPrescriptionsByUser(UUID userId) {
     return accessKeyService.getPrescriptionsByUserAndAccessKey(userId);
+  }
+
+  public GetEncryptedPrescriptionDTO getEncryptedPrescription(UUID userId, UUID prescriptionId) {
+    Prescription prescription = prescriptionRepository.findById(prescriptionId)
+      .orElseThrow(() -> new RuntimeException("No se encontró la receta médica con el id: " + prescriptionId));
+    
+    Medico medico = prescription.getMedico();
+    Paciente paciente = prescription.getPaciente();
+
+    AccessKey accessKey = accessKeyService.getAccessKey(userId, prescriptionId);
+    byte[] encryptedPrescriptionBytes = getEncyptedPrescription(prescriptionId);
+    String encryptedPrescription = new String(encryptedPrescriptionBytes, StandardCharsets.UTF_8);
+
+    UsuarioDTO usuarioPacienteDTO = new UsuarioDTO(
+      paciente.getId(), 
+      paciente.getUsuario().getEmail(), 
+      paciente.getUsuario().getNombre(), 
+      paciente.getUsuario().getFechaNacimiento());
+
+    PacienteDTO pacienteDTO = new PacienteDTO(
+      usuarioPacienteDTO,
+      paciente.getMatricula(),
+      paciente.getCurp()); 
+
+    UsuarioDTO usuarioMedicoDTO = new UsuarioDTO(
+      medico.getUsuario().getId(), 
+      medico.getUsuario().getEmail(), 
+      medico.getUsuario().getNombre(), 
+      medico.getUsuario().getFechaNacimiento());
+
+    MedicoDTO medicoDTO = new MedicoDTO(
+      usuarioMedicoDTO, 
+      medico.getEspecialidad(), 
+      medico.getClinica(), 
+      medico.getCedula(), 
+      medico.getTelefono());
+
+    PrescriptionDTO prescriptionDTO = new PrescriptionDTO(
+      prescription.getId(),
+      prescription.getSurtida(),
+      prescription.getSignatureMedico(),
+      prescription.getFecha_emision(),
+      prescription.getSignaturePharmacist(),
+      prescription.getFecha_surtido()
+    );
+
+    return new GetEncryptedPrescriptionDTO(
+      accessKey.getKey(),
+      accessKey.getServerPublicKey(),
+      encryptedPrescription,
+      pacienteDTO,
+      medicoDTO,
+      prescriptionDTO
+    );
   }
 
   private ObjectMapper createObjectMapper() {
