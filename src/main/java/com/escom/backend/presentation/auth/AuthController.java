@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.escom.backend.domain.dto.LoginRequest;
 import com.escom.backend.domain.dto.LoginResponse;
-import com.escom.backend.domain.dto.security.PublicKeyDTO;
+import com.escom.backend.domain.dto.security.CreatePublicKeyDTO;
 import com.escom.backend.presentation.services.AuthService;
 import com.escom.backend.presentation.services.PublicKeyService;
 
@@ -30,7 +30,7 @@ public class AuthController {
   }
 
   @PostMapping("/savePublicKey")
-  public ResponseEntity<String> savePublicKey(@Valid @RequestBody PublicKeyDTO publicKeyDto) {
+  public ResponseEntity<String> savePublicKey(@Valid @RequestBody CreatePublicKeyDTO publicKeyDto) {
     System.out.println("Tipo de clave: " + publicKeyDto.keyType);
     publicKeyService.savePublicKey(publicKeyDto);
     return ResponseEntity.ok("Clave pública almacenada con éxito");

@@ -4,7 +4,7 @@ package com.escom.backend.presentation.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.escom.backend.domain.dto.security.PublicKeyDTO;
+import com.escom.backend.domain.dto.security.CreatePublicKeyDTO;
 import com.escom.backend.domain.entities.security.PublicKeyUser;
 import com.escom.backend.domain.entities.users.Usuario;
 import com.escom.backend.domain.repositories.PublicKeyUserRepository;
@@ -18,8 +18,7 @@ public class PublicKeyService {
   @Autowired
   private UsuarioRepository usuarioRepository;
 
-  public void savePublicKey(PublicKeyDTO publicKeyDto) {
-    System.out.println("Guardando clave pública: " + publicKeyDto.publicKey);
+  public void savePublicKey(CreatePublicKeyDTO publicKeyDto) {
     Usuario usuario = usuarioRepository.findById(publicKeyDto.usuario_id)
       .orElseThrow(() -> new RuntimeException("Usuario no encontrado en la base de datos"));
 
