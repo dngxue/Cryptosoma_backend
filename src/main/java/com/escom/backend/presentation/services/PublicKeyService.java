@@ -19,7 +19,6 @@ public class PublicKeyService {
   private UsuarioRepository usuarioRepository;
 
   public void savePublicKey(CreatePublicKeyDTO publicKeyDto) {
-    System.out.println("Guardando clave pública: " + publicKeyDto.publicKey);
     Usuario usuario = usuarioRepository.findById(publicKeyDto.usuario_id)
       .orElseThrow(() -> new RuntimeException("Usuario no encontrado en la base de datos"));
 

@@ -103,7 +103,8 @@ public class PrescriptionService {
       KeyAgreementResult resultPaciente = keyAgreementService.generateSharedKey(publicKeyPaciente.getPublicKey());
       String encodedKeyPaciente = AES_GCM.encryptGCM(resultPaciente.sharedKey(), aesKeyBytes);
       accessKeyService.createAccessKey(paciente.getUsuario(), prescription, encodedKeyPaciente, resultPaciente.serverKeyPair().getPublicKeyBase64());
-      System.out.println("Shared Key: " + Base64.getEncoder().encodeToString(resultPaciente.sharedKey()));
+
+
       KeyAgreementResult resultMedico = keyAgreementService.generateSharedKey(publicKeyMedico.getPublicKey());
       String encodedKeyMedico = AES_GCM.encryptGCM(resultMedico.sharedKey(), aesKeyBytes);
       accessKeyService.createAccessKey(medico.getUsuario(), prescription, encodedKeyMedico, resultMedico.serverKeyPair().getPublicKeyBase64());

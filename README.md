@@ -58,3 +58,30 @@ Por ahora, dado que falta la firma del farmacéutico, regresa lo siguiente.
 }
 ```
 
+# Usuario cede permisos para visualizar la receta a un farmacéutico.
+## Descripción
+El paciente podrá ver en su vista los farmacéuticos, tiene que seleccionar a uno y podrá generar una llave de acceso para que el paciente pueda visualizar su receta y posteriormente ser surtida. El paciente podrá quitar el acceso a la receta.
+
+## Enpoint POST 
+```
+http://localhost:8080/patient/grant-access
+```
+
+## REQUEST
+
+```
+{
+    "idReceta": "21d0e6c3-6d0a-4d75-a58e-1cdb5e72f06f",
+    "idFarmaceutico": "b1060168-b395-476c-b97e-5cc6000acf40",
+    "password": "Ser123+12"
+} 
+```
+
+## RESPONSE
+```
+{
+    "status": "success",
+    "message": "Se ha creado una llave de acceso para el farmacéutico: b1060168-b395-476c-b97e-5cc6000acf40"
+}
+```
+
