@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.escom.backend.domain.dto.LoginRequest;
-import com.escom.backend.domain.dto.LoginResponse;
+import com.escom.backend.domain.dto.login.LoginRequest;
+import com.escom.backend.domain.dto.login.LoginResponse;
 import com.escom.backend.domain.dto.security.CreatePublicKeyDTO;
 import com.escom.backend.presentation.services.AuthService;
 import com.escom.backend.presentation.services.PublicKeyService;
