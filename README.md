@@ -84,4 +84,3 @@ http://localhost:8080/patient/grant-access
     "message": "Se ha creado una llave de acceso para el farmacéutico: b1060168-b395-476c-b97e-5cc6000acf40"
 }
 ```
-

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.UUID;
 
-import javax.crypto.KeyAgreement;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +29,6 @@ import com.escom.backend.domain.repositories.UsuarioRepository;
 import com.escom.backend.presentation.cripto.AES_GCM;
 import com.escom.backend.presentation.cripto.ECDH25519;
 import com.escom.backend.presentation.services.security.AccessKeyService;
-import com.escom.backend.presentation.services.security.KeyAgreementService;
-import com.escom.backend.presentation.services.security.KeyAgreementService.KeyAgreementResult;
 
 @Service
 public class PatientService {
@@ -42,7 +39,6 @@ public class PatientService {
   @Autowired private AccessKeyRepository accessKeyRepository;
   @Autowired private UsuarioRepository usuarioRepository;
 
-  @Autowired private KeyAgreementService keyAgreementService;
   @Autowired private AccessKeyService accessKeyService;
 
   private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

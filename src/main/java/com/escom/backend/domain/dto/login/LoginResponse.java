@@ -1,4 +1,4 @@
-package com.escom.backend.domain.dto;
+package com.escom.backend.domain.dto.login;
 
 import java.util.UUID;
 
